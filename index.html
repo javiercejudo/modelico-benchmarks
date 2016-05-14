@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Modelico Reviver Benchmarks</title>
+  </head>
+  <body>
+    <h1>Modelico Reviver Benchmarks</h1>
+
+    <p>see console</p>
+
+    <script src="node_modules/lodash/lodash.js"></script>
+    <script src="node_modules/platform/platform.js"></script>
+    <script src="node_modules/benchmark/benchmark.js"></script>
+
+    <script src="https://cdn.rawgit.com/javiercejudo/modelico/v12.6.1/dist/modelico.js"></script>
+    <script>
+      Modelico12 = Modelico;
+    </script>
+    <script src="https://cdn.rawgit.com/javiercejudo/modelico/top-down-reviving-dist/dist/modelico.js"></script>
+
+    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/6929810d4c1dc694ce2637e75eb7dff94605f68e/modelico-types.js"></script>
+    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/afc88ca2fde66040f1ca9f9ddc2ef0014d85cc1a/modelico-types-12.js"></script>
+
+    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/116f534f910b791155831d961bf92b04104a651b/person-fixture.js"></script>
+
+    <script>
+      var suite = new Benchmark.Suite;
+
+      var reviver = Modelico.Modelico.metadata(Person).reviver;
+      var reviver12 = Modelico12.Modelico.metadata(Person12).reviver;
+
+      // add tests
+      suite
+        .add('top-down (new)', function() {
+          JSON.parse(personJson, reviver);
+        })
+        .add('bottom-up (old)', function() {
+          JSON.parse(personJson, reviver12);
+        })
+        // add listeners
+        .on('cycle', function(event) {
+          console.log(String(event.target));
+        })
+        .on('complete', function() {
+          console.log('Fastest is ' + this.filter('fastest').map('name'));
+        })
+        // run async
+        .run({ 'async': true });
+    </script>
+  </body>
+</html>
