@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "benchmark": "^2.1.0"
+    "benchmark": "^2.1.2"
   }
 }

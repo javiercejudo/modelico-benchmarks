@@ -17,25 +17,46 @@
       Modelico12 = Modelico;
     </script>
     <script src="https://cdn.rawgit.com/javiercejudo/modelico/v13.0.0/dist/modelico.js"></script>
+    <script>
+      Modelico13 = Modelico;
+    </script>
+    <script src="https://cdn.rawgit.com/javiercejudo/modelico/v21.2.1/dist/modelico.js"></script>
+    <script>
+      Modelico21_2_1 = Modelico;
+    </script>
+    <script src="/js/modelico-snapshot.js"></script>
+    <script>
+      ModelicoSnapshot = Modelico;
+    </script>
 
-    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/6929810d4c1dc694ce2637e75eb7dff94605f68e/modelico-types.js"></script>
     <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/afc88ca2fde66040f1ca9f9ddc2ef0014d85cc1a/modelico-types-12.js"></script>
+    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/4819d01d2de05ca33d0bec28fe60026dec9a4016/modelico-types-13.js"></script>
+    <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/77d08215fffc387d73e61f0e23a51fe1845e8efc/modelico-types-21_2_1.js"></script>
+    <script src="/js/modelico-types-snapshot.js"></script>
 
     <script src="https://cdn.rawgit.com/javiercejudo/79a8fb37ad719a3284545623e2c44594/raw/116f534f910b791155831d961bf92b04104a651b/person-fixture.js"></script>
 
     <script>
       var suite = new Benchmark.Suite;
 
-      var reviver = Modelico.Modelico.metadata(Person).reviver;
       var reviver12 = Modelico12.Modelico.metadata(Person12).reviver;
+      var reviver13 = Modelico13.Modelico.metadata(Person13).reviver;
+      var reviver21_2_1 = Modelico21_2_1.metadata()._(Person21_2_1).reviver;
+      var reviverSnapshot = ModelicoSnapshot.metadata()._(PersonSnapshot).reviver;
 
       // add tests
       suite
-        .add('top-down (new)', function() {
-          JSON.parse(personJson, reviver);
-        })
         .add('bottom-up (old)', function() {
           JSON.parse(personJson, reviver12);
+        })
+        .add('top-down (new)', function() {
+          JSON.parse(personJson, reviver13);
+        })
+        .add('latest', function() {
+          JSON.parse(personJson, reviver21_2_1);
+        })
+        .add('snapshot', function() {
+          JSON.parse(personJson, reviverSnapshot);
         })
         // add listeners
         .on('cycle', function(event) {
